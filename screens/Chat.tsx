@@ -1,21 +1,15 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useContext } from "react";
-import { Text } from "react-native";
-import {
-  Channel,
-  ChannelList,
-  Chat,
-  MessageInput,
-  MessageList,
-  OverlayProvider,
-} from "stream-chat-expo";
+
+import { ChannelList, Chat, OverlayProvider } from "stream-chat-expo";
 import { AppContext } from "../hooks/AppContext";
 import { client } from "../hooks/useClient";
 
 const ChatChannel = ({ tabLabel }: any) => {
   const [isReady, setIsReady] = useState(false);
-  const [selectedChannel, setSelectedChannel] = useState<any>(null);
   const userToken = client.devToken("joggz");
-  const { channelId, setChannelId } = useContext(AppContext);
+  const { setSelectedChannel } = useContext<any>(AppContext);
+  const navigation = useNavigation();
 
   useEffect((): any => {
     const connectUser = async () => {
@@ -44,7 +38,7 @@ const ChatChannel = ({ tabLabel }: any) => {
 
   const onChannelPress = (channel: any) => {
     setSelectedChannel(channel);
-    // setChannelId(channel._client.key);
+    navigation.navigate("ChatByID");
   };
 
   if (!isReady) {
@@ -53,15 +47,12 @@ const ChatChannel = ({ tabLabel }: any) => {
     return (
       <OverlayProvider>
         <Chat client={client}>
-          {console.log(selectedChannel)}
-          {selectedChannel && channelId ? (
-            <Channel channel={selectedChannel} keyboardVerticalOffset={0}>
+          {/* <Channel channel={selectedChannel} keyboardVerticalOffset={0}>
               <MessageList />
               <MessageInput />
-            </Channel>
-          ) : (
-            <ChannelList onSelect={onChannelPress} />
-          )}
+            </Channel> */}
+
+          <ChannelList onSelect={onChannelPress} />
         </Chat>
       </OverlayProvider>
     );
