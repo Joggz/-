@@ -4,6 +4,7 @@ import ChatChannel from "./Chat";
 import ScrollableTabView, {
   ScrollableTabBar,
 } from "react-native-scrollable-tab-view";
+import ChatWithFloatingActionButton from "./ChatWithFloatingActionButton";
 
 const Index = () => {
   return (
@@ -12,7 +13,8 @@ const Index = () => {
       initialPage={0}
       renderTabBar={() => <ScrollableTabBar />}
     >
-      <ChatChannel tabLabel="Chats" />
+      {/* <ChatChannel tabLabel="Chats" /> */}
+      <ChatWithFloatingActionButton tabLabel="Chats" />
       <Calls tabLabel="Calls" />
     </ScrollableTabView>
   );
