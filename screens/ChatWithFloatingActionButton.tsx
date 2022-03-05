@@ -1,11 +1,23 @@
 import { FontAwesome } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, Image, StyleSheet, Alert } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { client } from "../hooks/useClient";
 import ChatChannel from "./Chat";
 
 const ChatWithFloatingActionButton = ({ tabLabel }: any) => {
-  const floatButtonEvent = () => Alert.alert("Floating Button Clicked");
+  const [users, setUsers] = useState<any[]>([]);
+  const floatButtonEvent = () => fetchUsers();
+
+  const fetchUsers = async (): Promise<void> => {
+    const response = await client.queryUsers({});
+    response ? setUsers(response?.users) : setUsers([]);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <ChatChannel />
