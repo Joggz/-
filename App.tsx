@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { LogBox, Pressable } from "react-native";
+import { LogBox, Pressable, StyleSheet, View } from "react-native";
 import {
   DarkTheme,
   DefaultTheme,
@@ -20,6 +20,8 @@ import Colors from "./constants/Colors";
 import useColorScheme from "./hooks/useColorScheme";
 import { AppContext } from "./hooks/AppContext";
 import ChatScreen from "./screens/ChatScreen";
+import ChatContact from "./screens/ChatContact";
+import { useNavigation } from "@react-navigation/native";
 
 LogBox.ignoreAllLogs(true);
 
@@ -53,6 +55,7 @@ type ChannelRoute = { Channel: undefined };
 type ChannelListRoute = { ChannelList: undefined };
 type ThreadRoute = { Thread: undefined };
 type ChatRoute = { ChatScreen: undefined };
+type ContactRoute = { ChatContact: undefined };
 type NavigationParamsList = ChannelRoute &
   ChannelListRoute &
   ThreadRoute &
@@ -66,6 +69,7 @@ const App = () => {
   const theme = useStreamChatTheme();
   const [selectChannel, setSelectChannel] = useState<any>({});
   const { selectedChannel, setSelectedChannel } = useContext(AppContext);
+  const [chatUsers, setChatUsers] = useState<any>([]);
 
   return (
     <NavigationContainer
@@ -81,6 +85,8 @@ const App = () => {
         value={{
           selectedChannel: selectChannel,
           setSelectedChannel: setSelectChannel,
+          users: chatUsers,
+          setUsers: setChatUsers,
         }}
       >
         <OverlayProvider<StreamChatGenerics>
@@ -137,6 +143,60 @@ const App = () => {
                   headerTitle: "чат",
                 })}
               />
+
+              <Stack.Screen
+                name="ChatContact"
+                component={ChatContact}
+                options={() => ({
+                  headerBackTitle: "Back",
+                  // headerLeft: () => (
+                  //   <Pressable
+                  //     onPress={() => console.log}
+                  //     style={({ pressed }) => ({
+                  //       opacity: pressed ? 0.5 : 1,
+                  //     })}
+                  //   >
+                  //     <FontAwesome
+                  //       name="arrow-left"
+                  //       size={15}
+                  //       color={Colors[colorScheme].text}
+                  //       style={{ marginLeft: 30 }}
+                  //     />
+                  //   </Pressable>
+                  // ),
+                  headerRight: () => (
+                    <View style={styles.bar}>
+                      <Pressable
+                        onPress={() => console.log}
+                        style={({ pressed }) => ({
+                          opacity: pressed ? 0.5 : 1,
+                        })}
+                      >
+                        <FontAwesome
+                          name="search"
+                          size={15}
+                          color={Colors[colorScheme].text}
+                          style={{ marginRight: 35 }}
+                        />
+                      </Pressable>
+                      <Pressable
+                        onPress={() => console.log}
+                        style={({ pressed }) => ({
+                          opacity: pressed ? 0.5 : 1,
+                        })}
+                      >
+                        <FontAwesome
+                          name="ellipsis-v"
+                          size={15}
+                          color={Colors[colorScheme].text}
+                          style={{ marginRight: 25 }}
+                        />
+                      </Pressable>
+                    </View>
+                  ),
+                  headerTitle: "Select Contact",
+                })}
+              />
             </Stack.Navigator>
           }
         </OverlayProvider>
@@ -144,6 +204,11 @@ const App = () => {
     </NavigationContainer>
   );
 };
+const styles = StyleSheet.create({
+  bar: {
+    flexDirection: "row",
+  },
+});
 
 export default () => {
   const theme = useStreamChatTheme();

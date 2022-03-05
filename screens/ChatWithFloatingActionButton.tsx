@@ -1,14 +1,20 @@
-import { FontAwesome } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, Image, StyleSheet, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/core";
+import React, { useContext, useEffect } from "react";
+import { TouchableOpacity, Image, StyleSheet, Alert } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AppContext } from "../hooks/AppContext";
 import { client } from "../hooks/useClient";
 import ChatChannel from "./Chat";
 
 const ChatWithFloatingActionButton = ({ tabLabel }: any) => {
-  const [users, setUsers] = useState<any[]>([]);
-  const floatButtonEvent = () => fetchUsers();
+  const navigation = useNavigation();
 
+  const floatButtonEvent = () => {
+    fetchUsers();
+    navigation.navigate("ChatContact");
+  };
+
+  const { setUsers, users } = useContext(AppContext);
   const fetchUsers = async (): Promise<void> => {
     const response = await client.queryUsers({});
     response ? setUsers(response?.users) : setUsers([]);
