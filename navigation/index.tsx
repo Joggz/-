@@ -26,7 +26,6 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-
 export default function Navigation({
   colorScheme,
 }: {
