@@ -1,9 +1,21 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import { client } from "../hooks/useClient";
 
 const UserList = ({ user }: any) => {
+  const onPress = () => {
+    // rememeber to had current userId  to the condition
+    if (!user?.id) {
+      return;
+    }
+
+    const channel = client.channel("messaging", {
+      members: [user?.id, userId],
+    });
+    channel.watch();
+  };
   return (
-    <View style={styles.root}>
+    <Pressable onPress={onPress} style={styles.root}>
       <Image
         source={{
           uri: user.image ? user?.image : "https://i.imgur.com/fR9Jz14.png",
@@ -11,7 +23,7 @@ const UserList = ({ user }: any) => {
         style={styles.image}
       />
       <Text style={styles.text}>{user.name ? user?.name : "Demo User"}</Text>
-    </View>
+    </Pressable>
   );
 };
 
